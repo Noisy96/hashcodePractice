@@ -3,14 +3,30 @@ import java.io.*;
 
 class solution {
 
+    // input values
     private static int maxSlices;
     private static int pizzaTypes;
     private static int[] slicesOnEachPizza;
 
+    // output values
+    private static int numberOfTypesChosen = 0;
+    private static ArrayList<Integer> indexOfChosenPizza = new ArrayList<Integer>();
+    private static int score;
+
     public static void main(String args[]){
         readInput();
-        writeOutput();
+        score = solveProblem(maxSlices, pizzaTypes-1);
+        writeOutput(score);
+    }
 
+    private static int solveProblem(int c, int i){
+        if(c==0 || i<0) return maxSlices - c;
+        else if(c < slicesOnEachPizza[i]) return solveProblem(c, i-1);
+        else {
+            int ordering = solveProblem(c-slicesOnEachPizza[i],i-1);
+            int notOrdering = solveProblem(c,i-1);
+            return ordering > notOrdering ? ordering : notOrdering;
+        }
     }
 
     private static void readInput(){
@@ -23,11 +39,8 @@ class solution {
         }
     }
 
-    private static void writeOutput(){
-        System.out.println(maxSlices+" "+pizzaTypes);
-        for(int i=0;i<pizzaTypes;i++){
-            System.out.print(slicesOnEachPizza[i]+" ");
-        }
+    private static void writeOutput(int score){
+        System.out.println("Score = "+score);
     }
 
 }

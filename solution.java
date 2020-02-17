@@ -25,7 +25,8 @@ class solution {
         else {
             int ordering = solveProblem(c-slicesOnEachPizza[i],i-1);
             int notOrdering = solveProblem(c,i-1);
-            return ordering > notOrdering ? ordering : notOrdering;
+            int result = ordering > notOrdering ? ordering : notOrdering;
+            return result;
         }
     }
 

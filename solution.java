@@ -5,27 +5,46 @@ class solution {
 
     // input values
     private static int maxSlices;
-    private static int pizzaTypes;
+    private static int numberOfPizzaTypes;
     private static int[] slicesOnEachPizza;
 
     // output values
-    private static int numberOfTypesChosen = 0;
-    private static ArrayList<Integer> indexOfChosenPizza = new ArrayList<Integer>();
-    private static int score;
+    private static String[] output;
 
     public static void main(String args[]){
         readInput();
-        score = solveProblem(maxSlices, pizzaTypes-1);
-        writeOutput(score);
+        output = solveProblem(maxSlices, numberOfPizzaTypes-1);
+        writeOutput(output[1]);
     }
 
-    private static int solveProblem(int c, int i){
-        if(c==0 || i<0) return maxSlices - c;
-        else if(c < slicesOnEachPizza[i]) return solveProblem(c, i-1);
+    private static String[] solveProblem(int c, int i){
+
+        String[] result = new String[2];
+
+        if(c==0 || i<0){
+            result[0] = String.valueOf(maxSlices - c);
+            result[1] = "";
+            return result;
+        }
+        else if(c < slicesOnEachPizza[i]){
+            result = solveProblem(c, i-1);
+            result[1] += "0";
+            return result;
+        }
         else {
-            int ordering = solveProblem(c-slicesOnEachPizza[i],i-1);
-            int notOrdering = solveProblem(c,i-1);
-            int result = ordering > notOrdering ? ordering : notOrdering;
+            String[] ordering = solveProblem(c-slicesOnEachPizza[i],i-1);
+            String[] notOrdering = solveProblem(c,i-1);
+            
+            if(Integer.valueOf(ordering[0])>Integer.valueOf(notOrdering[0])){
+                result[0] = ordering[0];
+                result[1] = ordering[1];
+                result[1] += "1";
+            }
+            else {
+                result[0] = notOrdering[0];
+                result[1] = notOrdering[1];
+                result[1] += "0"; 
+            }
             return result;
         }
     }
@@ -33,15 +52,19 @@ class solution {
     private static void readInput(){
         Scanner scanner = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
         maxSlices = scanner.nextInt();
-        pizzaTypes = scanner.nextInt();
-        slicesOnEachPizza = new int[pizzaTypes];
-        for(int i=0;i<pizzaTypes;i++){
+        numberOfPizzaTypes = scanner.nextInt();
+        slicesOnEachPizza = new int[numberOfPizzaTypes];
+        for(int i=0;i<numberOfPizzaTypes;i++){
             slicesOnEachPizza[i] = scanner.nextInt();
         }
     }
 
-    private static void writeOutput(int score){
-        System.out.println("Score = "+score);
+    private static void writeOutput(String output){
+        for(int i=0;i<output.length();i++){
+            if(output.charAt(i)=='1'){
+                System.out.print(i+" ");
+            }
+        }
     }
 
 }
